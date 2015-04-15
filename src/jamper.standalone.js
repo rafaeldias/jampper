@@ -1,9 +1,3 @@
-/**
- * Objeto de requisição a API REST da aplicação.
- *
- * Objeto faz um mapeamento dos méotodos de CRUD e
- * também da estrutura da API REST da aplicação.
- */
 
 (function($) {
   /**
@@ -153,7 +147,7 @@
       /**
        * tokens validos para parsear JSON
        */
-    , rvalidtokens = /(,)|(\[|{)|(}|])|"(?:[^"\\\r\n]|\\["\\\/bfnrt]|\\u[\da-fA-F]{4})*"\s*:?|true|false|null|-?(?!0\d)\d+(?:\.\d+|)(?:[eE][+-]?\d+|)/g;
+    , rvalidtokens = /(,)|(\[|{)|(}|])|"(?:[^"\\\r\n]|\\["\\\/bfnrt]|\\u[\da-fA-F]{4})*"\s*:?|true|false|null|-?(?!0\d)\d+(?:\.\d+|)(?:[eE][+-]?\d+|)/g
     , parseJSON = function(data) {
         // Attempt to parse using the native JSON parser first
         if (window.JSON && window.JSON.parse) {

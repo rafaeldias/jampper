@@ -1,0 +1,25 @@
+{
+  "name": "jampper",
+  "version": "0.0.0",
+  "homepage": "https://github.com/rafaeldias/jamper",
+  "authors": [
+    "Rafael Leal Dias <rafaeldias.c@gmail.com>"
+  ],
+  "description": "Javascript API mapper",
+  "main": "src/jammper.js",
+  "keywords": [
+    "['REST",
+    "API'",
+    "'API",
+    "Mapper']"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "jquery": "",
+    "requirejs": ""
+  }
+  "ignore": [
+    "bower_components",
+    "test",
+  ]
+}
