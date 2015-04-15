@@ -17,7 +17,7 @@
   "devDependencies": {
     "jquery": "",
     "requirejs": ""
-  }
+  },
   "ignore": [
     "bower_components",
     "test",
