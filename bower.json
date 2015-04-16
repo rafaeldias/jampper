@@ -8,16 +8,11 @@
   "description": "Javascript API mapper",
   "main": "src/jammper.js",
   "keywords": [
-    "['REST",
-    "API'",
-    "'API",
-    "Mapper']"
+    "REST",
+    "API",
+    "Mapper'"
   ],
   "license": "MIT",
-  "devDependencies": {
-    "jquery": "",
-    "requirejs": ""
-  },
   "ignore": [
     "bower_components",
     "test",

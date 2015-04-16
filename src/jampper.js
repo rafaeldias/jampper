@@ -5,7 +5,7 @@
  * também da estrutura da API REST da aplicação.
  */
 
-define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
+define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
   var /**
        * Métodos HTTP utilizados na API REST da aplicação
        */
@@ -27,7 +27,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
     , request = function(type, opts) {
         var that = this;
 
-        this.jxhr = $.ajax($.extend({
+        this.jxhr = jQuery.ajax(jQuery.extend({
           url : this.route,
           type : type,
           dataType : 'json'
@@ -41,7 +41,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
               var res;
 
               try {
-                res = $.parseJSON(jqXhr.responseText);
+                res = jQuery.parseJSON(jqXhr.responseText);
               } catch(e) {
                 res = { error : jqXhr.responseText }
               }
@@ -78,20 +78,20 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
    * So we don't need to unecessarily
    * import all the code of jquery/serialize
    */
-  if ( 'undefined' === typeof $.param )
-    $.param = (function() {
+  if ( 'undefined' === typeof jQuery.param )
+    jQuery.param = (function() {
       var r20 = /%20/g
-        , rbracket = /\[\]$/
+        , rbracket = /\[\]jQuery/
         , rCRLF = /\r?\n/g
-        , rsubmitterTypes = /^(?:submit|button|image|reset|file)$/i
+        , rsubmitterTypes = /^(?:submit|button|image|reset|file)jQuery/i
         , rsubmittable = /^(?:input|select|textarea|keygen)/i;
 
       function buildParams( prefix, obj, traditional, add ) {
         var name;
 
-        if ( $.isArray( obj ) ) {
+        if ( jQuery.isArray( obj ) ) {
           // Serialize array item.
-          $.each( obj, function( i, v ) {
+          jQuery.each( obj, function( i, v ) {
             if ( traditional || rbracket.test( prefix ) ) {
               // Treat each array item as a scalar.
               add( prefix, v );
@@ -107,7 +107,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
             }
           });
 
-        } else if ( !traditional && $.type( obj ) === "object" ) {
+        } else if ( !traditional && jQuery.type( obj ) === "object" ) {
           // Serialize object item.
           for ( name in obj ) {
             buildParams( prefix + "[" + name + "]", obj[ name ], traditional, add );
@@ -126,19 +126,19 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
           s = [],
           add = function( key, value ) {
             // If value is a function, invoke it and return its value
-            value = $.isFunction( value ) ? value() : ( value == null ? "" : value );
+            value = jQuery.isFunction( value ) ? value() : ( value == null ? "" : value );
             s[ s.length ] = encodeURIComponent( key ) + "=" + encodeURIComponent( value );
           };
 
         // Set traditional to true for jQuery <= 1.3.2 behavior.
         if ( traditional === undefined ) {
-          traditional = $.ajaxSettings && $.ajaxSettings.traditional;
+          traditional = jQuery.ajaxSettings && jQuery.ajaxSettings.traditional;
         }
 
         // If an array was passed in, assume that it is an array of form elements.
-        if ( $.isArray( a ) || ( a.$ && !$.isPlainObject( a ) ) ) {
+        if ( jQuery.isArray( a ) || ( a.jQuery && !jQuery.isPlainObject( a ) ) ) {
           // Serialize the form elements
-          $.each( a, function() {
+          jQuery.each( a, function() {
             add( this.name, this.value );
           });
 
