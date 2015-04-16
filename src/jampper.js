@@ -36,12 +36,6 @@
     , request = function(type, opts) {
         var that = this;
 
-        console.log($.extend({
-          url : this.route,
-          type : type,
-          dataType : 'json'
-        }, opts));
-
         this.jxhr = $.ajax($.extend({
           url : this.route,
           type : type,

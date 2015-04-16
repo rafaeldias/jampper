@@ -1,0 +1,30 @@
+{
+  "name": "jampper",
+  "version": "0.0.1",
+  "description": "Javascript API Mapper",
+  "author": "Rafael Leal Dias",
+  "main": "dist/jampper.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafaeldias/jamper.git"
+  },
+  "keywords": [
+    "REST",
+    "API",
+    "Mapper"
+  ],
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-uglify": "~0.9.1"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rafaeldias/jamper/issues"
+  }
+}
