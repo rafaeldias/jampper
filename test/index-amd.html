@@ -5,13 +5,13 @@
     <title>Jampper Test</title>
   </head>
   <body>
-    <script src="../bower_components/requirejs/require.js"></script>
+    <script src="../node_modules/requirejs/require.js"></script>
     <script>
       require.config({
         baseUrl : window.location.href.split('test')[0],
         paths : {
-          "jquery"  : "bower_components/jquery/src",
-          "sizzle"  : "bower_components/jquery/src/sizzle/dist/sizzle",
+          "jquery"  : "node_modules/jquery/src",
+          "sizzle"  : "node_modules/jquery/src/sizzle/dist/sizzle",
           "lib"     : "src"
         }
       });
