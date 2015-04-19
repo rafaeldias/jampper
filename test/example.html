@@ -7,22 +7,23 @@
   <body>
     <script src="../dist/jampper.js"></script>
     <script> 
+      Jampper.setup({
+        global : false
+      });
       var api = new Jampper("https://api.github.com", {
             users : null,
             search : {
               repositories : null
             },
             repos : {
-              jampper : {
-                commits : {
-                  sha : null
-                },
-                contributors : null
-              }
+              commits : {
+                sha : null
+              },
+              contributors : null
             }
           })
         , search = api.search()
-        , repos = api.repos('rafaeldias');
+        , repos = api.repos('rafaeldias/jampper');
 
       api.users('rafaeldias')
         .read(function(res){ console.log(res) });
@@ -37,7 +38,7 @@
         console.log(res);
       });
 
-      repos.jampper().commits().read(function(res) {
+      repos.commits().read(function(res) {
         console.log(res);
       });
     </script>

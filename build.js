@@ -91,6 +91,9 @@ var requirejs = require('requirejs')
             .replace( /define\(\[[^\]]*\]\)[\W\n]+$/, "" );
         }
 
+        // Internally Jampper uses $ as a ref to jQuery.
+        contents = contents.replace(/jQuery/g, '$');
+
         return contents;
       }
     };

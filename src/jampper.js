@@ -4,7 +4,7 @@
  * Lib for mapping REST APIs in Javascript.
  */
 
-define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
+define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
   var /**
        * Default CRUD methods
        */
@@ -25,7 +25,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
     , request = function(type, opts) {
         var that = this;
 
-        this.jxhr = jQuery.ajax(jQuery.extend(opts || {}, {
+        this.jxhr = $.ajax($.extend(opts || {}, {
           url : this.route,
           type : type
         }))
@@ -38,7 +38,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
               var res;
 
               try {
-                res = jQuery.parseJSON(jqXhr.responseText);
+                res = $.parseJSON(jqXhr.responseText);
               } catch(e) {
                 res = { error : jqXhr.responseText || jqXhr.responseXML }
               }
@@ -65,7 +65,8 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
           for( var sub in resources )
             this[sub] = (function(resource, subresources) {
               return function(id) {
-                return new that.constructor(that.route + '/' + resource + (id && '/' + id || ''), subresources != null && 'object' === typeof subresources ?  subresources : null);
+                return new that.constructor(that.route + '/' + resource + (id && '/' + id || ''),
+                                            subresources != null && 'object' === typeof subresources ?  subresources : null);
               };
             })(sub, resources[sub]);
       };
@@ -75,20 +76,18 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
    * So we don't need to * import all * the code
    * form jquery/serialize unecessarily
    */
-  if ( 'undefined' === typeof jQuery.param )
-    jQuery.param = (function() {
+  if ( 'undefined' === typeof $.param )
+    $.param = (function() {
       var r20 = /%20/g
-        , rbracket = /\[\]jQuery/
-        , rCRLF = /\r?\n/g
-        , rsubmitterTypes = /^(?:submit|button|image|reset|file)jQuery/i
-        , rsubmittable = /^(?:input|select|textarea|keygen)/i;
+        , rbracket = /\[\]\$/
+        , rCRLF = /\r?\n/g;
 
       function buildParams( prefix, obj, traditional, add ) {
         var name;
 
-        if ( jQuery.isArray( obj ) ) {
+        if ( $.isArray( obj ) ) {
           // Serialize array item.
-          jQuery.each( obj, function( i, v ) {
+          $.each( obj, function( i, v ) {
             if ( traditional || rbracket.test( prefix ) ) {
               // Treat each array item as a scalar.
               add( prefix, v );
@@ -104,7 +103,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
             }
           });
 
-        } else if ( !traditional && jQuery.type( obj ) === "object" ) {
+        } else if ( !traditional && $.type( obj ) === "object" ) {
           // Serialize object item.
           for ( name in obj ) {
             buildParams( prefix + "[" + name + "]", obj[ name ], traditional, add );
@@ -123,19 +122,19 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
           s = [],
           add = function( key, value ) {
             // If value is a function, invoke it and return its value
-            value = jQuery.isFunction( value ) ? value() : ( value == null ? "" : value );
+            value = $.isFunction( value ) ? value() : ( value == null ? "" : value );
             s[ s.length ] = encodeURIComponent( key ) + "=" + encodeURIComponent( value );
           };
 
         // Set traditional to true for jQuery <= 1.3.2 behavior.
         if ( traditional === undefined ) {
-          traditional = jQuery.ajaxSettings && jQuery.ajaxSettings.traditional;
+          traditional = $.ajaxSettings && $.ajaxSettings.traditional;
         }
 
         // If an array was passed in, assume that it is an array of form elements.
-        if ( jQuery.isArray( a ) || ( a.jQuery && !jQuery.isPlainObject( a ) ) ) {
+        if ( $.isArray( a ) || ( a.$ && !$.isPlainObject( a ) ) ) {
           // Serialize the form elements
-          jQuery.each( a, function() {
+          $.each( a, function() {
             add( this.name, this.value );
           });
 
@@ -169,6 +168,14 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
         };
       })(method);
   };
+
+  /**
+   * Exposes .setup method of Jumpper,
+   * so it's possible to configure
+   * global ajax properties even
+   * if the user is not using jQuery.
+   */
+  Jampper.setup = $.ajaxSetup;
 
   /**
    * Abort current request
