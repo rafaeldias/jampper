@@ -152,7 +152,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
     })();
 
   /**
-   * Define métodos create, read, update e delete
+   * Define methods create, read, update and delete
    * no protótipo do objeto Jampper.
    */
   Jampper.addMethod = function(methods) {
