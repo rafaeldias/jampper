@@ -1,13 +1,12 @@
 /**
- * Objeto de requisição a API REST da aplicação.
+ * Javascript API Mapper.
  *
- * Objeto faz um mapeamento dos méotodos de Jampper e
- * também da estrutura da API REST da aplicação.
+ * Lib for mapping REST APIs in Javascript.
  */
 
 define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
   var /**
-       * Métodos HTTP utilizados na API REST da aplicação
+       * Default CRUD methods
        */
       crudMap = {
         'create' : 'POST',
@@ -16,22 +15,20 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
         'delete' : 'DELETE'
       }
       /**
-       * Função para efetura a requisição
-       * ao servidor.
+       * Sends request to the server
        *
-       * @pram {String} type - Método HTTP utilizado na requisição.
-       * @param {Object} data - Dados a serem enviados ao servidor.
+       * @param {String} HTTP method 
+       * @param {Object} Options to be used in the request
        *
        * @return {Object} Jampper
        */
     , request = function(type, opts) {
         var that = this;
 
-        this.jxhr = jQuery.ajax(jQuery.extend({
+        this.jxhr = jQuery.ajax(jQuery.extend(opts || {}, {
           url : this.route,
-          type : type,
-          dataType : 'json'
-        }, opts || {}))
+          type : type
+        }))
           .done(function() {
             if ( 'function' === typeof that.callback ) {
               that.callback.apply(that, arguments);
@@ -43,7 +40,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
               try {
                 res = jQuery.parseJSON(jqXhr.responseText);
               } catch(e) {
-                res = { error : jqXhr.responseText }
+                res = { error : jqXhr.responseText || jqXhr.responseXML }
               }
 
               if ( 'function' === typeof that.callback )
@@ -52,31 +49,31 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
         return this;
       }
       /**
-       * Construtor do objeto Jampper.
+       * Jampper's constructor
        *
-       * @param {String} route - Rota do objeto
-       * @param {Object} resources - Recursos que podem ser utilizados no objeto.
+       * @param {String} host of the API
+       * @param {Object} resources - map of resources accepted by the API
        *
-       * @return {Object} Jammper 
+       * @return {Object} Jammper
        */
-    , Jampper = function(route, resources) {
+    , Jampper = function(host, resources) {
         var that = this
 
-        this.route = route;
+        this.route = host;
 
         if ( resources )
           for( var sub in resources )
             this[sub] = (function(resource, subresources) {
               return function(id) {
-                return new that.constructor(that.route + '/' + resource + (id && '/' + id || ''), subresources !== null && 'object' === typeof subresources ?  subresources : null);
+                return new that.constructor(that.route + '/' + resource + (id && '/' + id || ''), subresources != null && 'object' === typeof subresources ?  subresources : null);
               };
             })(sub, resources[sub]);
       };
 
   /**
    * Define jQuery.params, if not defined.
-   * So we don't need to unecessarily
-   * import all the code of jquery/serialize
+   * So we don't need to * import all * the code
+   * form jquery/serialize unecessarily
    */
   if ( 'undefined' === typeof jQuery.param )
     jQuery.param = (function() {
@@ -159,20 +156,22 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
    * Define métodos create, read, update e delete
    * no protótipo do objeto Jampper.
    */
-  for ( var method in crudMap )
-    Jampper.prototype[method] = (function(met) {
-      return function(opts, done) {
-        if ( 'function' === typeof opts ) {
-          done = opts;
-          opts = void 0;
-        }
-        this.callback = done;
-        return request.call(this, crudMap[met], opts);
-      };
-    })(method);
+  Jampper.addMethod = function(methods) {
+    for ( var method in methods )
+      Jampper.prototype[method] = (function(met) {
+        return function(opts, done) {
+          if ( 'function' === typeof opts ) {
+            done = opts;
+            opts = void 0;
+          }
+          this.callback = done;
+          return request.call(this, methods[met], opts);
+        };
+      })(method);
+  };
 
   /**
-   * Aborta requisição atual.
+   * Abort current request
    */
   Jampper.prototype.abort = function() {
     if (this.jxhr && 'object' === typeof this.jxhr)
@@ -181,18 +180,20 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function(jQuery) {
   };
 
   /**
-   * Define método done no protótipo do objeto Jampper 
+   * callback of the request.
+   * Unlike $.ajax.done, this method will
+   * be called whether the requisition was
+   * succeful or not.
    */
   Jampper.prototype.done = function(next) {
     this.callback = 'function' === typeof next &&  next;
     return this;
   };
 
-  /**
-   * Retorna instância inicial do objeto Jampper.
-   * Os recursos do primeiro nível já estarão
-   * disponíveis.
-   */
+  // Maps default methods for CRUD
+  Jampper.addMethod(crudMap);
+
+  // Exposes Jampper Object
   return Jampper;
 
 });

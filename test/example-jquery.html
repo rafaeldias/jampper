@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Jampper Test</title>
+  </head>
+  <body>
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../dist/jampper.jquery.js"></script>
+    <script> 
+      Jampper.addMethod({ 'header' : 'HEAD' });
+
+      var api = new Jampper("https://api.github.com", {
+            users : null,
+            search : {
+              repositories : null
+            },
+            repos : {
+              commits : {
+                sha : null
+              },
+              contributors : null
+            }
+          })
+        , search = api.search()
+        , repo = api.repos('rafaeldias/jampper');
+
+      api.users('rafaeldias')
+        .read(function(res){ console.log(res) });
+
+      search.repositories().read({
+        data : {
+          q : "jampper language:javascript",
+          sort : "start",
+          order : "desc"
+        }
+      }, function(res) {
+        console.log(res);
+      });
+
+      repo.commits().read(function(res) {
+        console.log(res);
+      })
+        .header(function(res) {
+          console.log(this.jxhr.getAllResponseHeaders());
+        });; 
+    </script>
+  </body>
+</html>

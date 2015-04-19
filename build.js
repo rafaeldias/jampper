@@ -1,6 +1,7 @@
 var requirejs = require('requirejs')
   , fs = require('fs')
   , pkg = require('./package.json')
+  , isEmbeded = true 
   , excludes = ['jquery/ajax', 'jquery/ajax/xhr']
   , buildErr = function(err) {
       console.log(err);
@@ -31,8 +32,25 @@ var requirejs = require('requirejs')
         jquery: '../node_modules/jquery/src',
         sizzle: '../node_modules/jquery/src/sizzle/dist/sizzle',
       },
-      name: 'jampper',
-      out: dst + pkg.name + '.jquery.js',
+      name: pkg.name,
+      out: function( compressed ) {
+        // Get name of the file.
+        var name = dst + pkg.name + (isEmbeded ? '' : '.jquery') + '.js';
+
+        // Check if dest folder exists and creates it if not.
+        if ( !fs.existsSync(dst) ) {
+          fs.mkdirSync(dst);
+          console.log('Dest directory created.');
+        }
+        
+        compressed = compressed
+                    // Embed version
+                     .replace(/@VERSION/g, pkg.version)
+                     // Embed license
+                     .replace(/@LICENSE/g, pkg.license);
+
+        fs.writeFile(name, compressed);
+      },
       wrap: {
         startFile: 'src/start.js',
         endFile: 'src/end.js'
@@ -84,14 +102,12 @@ if (unlinkDistFolder(dst)) {
 
 requirejs.optimize(baseConfig, function(response) {
   console.log(response);
-  console.log('Lib ' + baseConfig.out + ' built.');
-  baseConfig.out = dst +  pkg.name + '.js';
-  baseConfig.exclude = excludes;
+  baseConfig.exclude = excludes; 
+  isEmbeded = false;
 
   requirejs.optimize(baseConfig, function(response) {
     console.log(response);
-    console.log('lib ' + baseConfig.out + ' built.');
-    console.log('\nDone.');
+    console.log('lib ' + pkg.name + ' built.');
   }, buildErr);
 
 }, buildErr);
