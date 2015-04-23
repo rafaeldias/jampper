@@ -82,7 +82,8 @@ You can add or overwrite methods mapped to HTTP verbs by calling the `mapMethod`
 Jampper.mapMethod({
   'update' : 'PATCH',
   'edit'   : 'PUT'
-}); ```
+}); 
+```
 
 Now the next time we call the overwritten `update` method on a resouce, the HTTP verb `PATCH` will be used in the request, and the new `edit` method will send the `PUT` HTTP verb to the server.
 
