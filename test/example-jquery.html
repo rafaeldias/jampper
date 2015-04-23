@@ -8,7 +8,11 @@
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../dist/jampper.jquery.js"></script>
     <script> 
-      Jampper.addMethod({ 'header' : 'HEAD' });
+      Jampper.mapMethod({
+        'update' : 'PATCH',
+        'edit' : 'UPDATE',
+        'header' : 'HEAD'
+      });
 
       var api = new Jampper("https://api.github.com", {
             users : null,
@@ -41,7 +45,7 @@
       repo.commits().read(function(res) {
         console.log(res);
       })
-        .header(function(res) {
+        .update(function(res) {
           console.log(this.jxhr.getAllResponseHeaders());
         });; 
     </script>

@@ -196,7 +196,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
   };
 
   // Maps default methods for CRUD
-  Jampper.addMethod(crudMap);
+  Jampper.mapMethod(crudMap);
 
   // Exposes Jampper Object
   return Jampper;
