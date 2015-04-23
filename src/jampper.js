@@ -17,7 +17,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
       /**
        * Sends request to the server
        *
-       * @param {String} HTTP method 
+       * @param {String} HTTP method
        * @param {Object} Options to be used in the request
        *
        * @return {Object} Jampper
@@ -34,17 +34,10 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
               that.callback.apply(that, arguments);
             }
           })
-            .fail(function(jqXhr) {
-              var res;
-
-              try {
-                res = $.parseJSON(jqXhr.responseText);
-              } catch(e) {
-                res = { error : jqXhr.responseText || jqXhr.responseXML }
+            .fail(function() {
+              if ( 'function' === typeof that.failCallback ) {
+                that.failCallback.apply(that, arguments);
               }
-
-              if ( 'function' === typeof that.callback )
-                that.callback.apply(that, [res].concat(arguments));
             });
         return this;
       }
@@ -59,11 +52,11 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
     , Jampper = function(host, resources) {
         var that = this
 
-        this.route = host;
+        this.route = host || '';
 
         if ( resources )
           for( var sub in resources )
-            this[sub] = (function(resource, subresources) {
+            this[sub.replace(/.(json[p]?|xml)+$/g, '')] = (function(resource, subresources) {
               return function(id) {
                 return new that.constructor(that.route + '/' + resource + (id && '/' + id || ''),
                                             subresources != null && 'object' === typeof subresources ?  subresources : null);
@@ -155,7 +148,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
    * Define methods create, read, update and delete
    * no protótipo do objeto Jampper.
    */
-  Jampper.addMethod = function(methods) {
+  Jampper.mapMethod = function(methods) {
     for ( var method in methods )
       Jampper.prototype[method] = (function(met) {
         return function(opts, done) {
@@ -188,12 +181,17 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
 
   /**
    * callback of the request.
-   * Unlike $.ajax.done, this method will
-   * be called whether the requisition was
-   * succeful or not.
    */
   Jampper.prototype.done = function(next) {
     this.callback = 'function' === typeof next &&  next;
+    return this;
+  };
+
+  /**
+   * callback used when the request fails.
+   */
+  Jampper.prototype.fail = function(next) {
+    this.failCallback = 'function' == typeof next && next;
     return this;
   };
 
