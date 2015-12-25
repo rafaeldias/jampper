@@ -30,15 +30,20 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
           type : type
         }))
           .done(function() {
-            if ( 'function' === typeof that.callback ) {
-              that.callback.apply(that, arguments);
+            if ( 'function' === typeof that.doneCallback ) {
+              that.doneCallback.apply(that, arguments);
             }
           })
             .fail(function() {
               if ( 'function' === typeof that.failCallback ) {
                 that.failCallback.apply(that, arguments);
               }
-            });
+            })
+              .always(function() {
+                if ( 'function' === typeof that.alwaysCallback ) {
+                  that.alwaysCallback.apply(that, arguments);
+                }
+              });
         return this;
       }
       /**
@@ -56,7 +61,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
 
         if ( resources )
           for( var sub in resources )
-            this[sub.replace(/.(json[p]?|xml)+$/g, '')] = (function(resource, subresources) {
+            this[sub.replace(/\.[^.]+$/g, '')] = (function(resource, subresources) {
               return function(id) {
                 return new that.constructor(that.route + '/' + resource + (id && '/' + id || ''),
                                             subresources != null && 'object' === typeof subresources ?  subresources : null);
@@ -146,7 +151,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
 
   /**
    * Define methods create, read, update and delete
-   * no protótipo do objeto Jampper.
+   * to the Jampper's prototype.
    */
   Jampper.mapMethod = function(methods) {
     for ( var method in methods )
@@ -156,7 +161,7 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
             done = opts;
             opts = void 0;
           }
-          this.callback = done;
+          this.alwaysCallback = done;
           return request.call(this, methods[met], opts);
         };
       })(method);
@@ -180,10 +185,10 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
   };
 
   /**
-   * callback of the request.
+   * callback used when the request succeeds
    */
   Jampper.prototype.done = function(next) {
-    this.callback = 'function' === typeof next &&  next;
+    this.doneCallback = 'function' === typeof next &&  next;
     return this;
   };
 
@@ -192,6 +197,14 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
    */
   Jampper.prototype.fail = function(next) {
     this.failCallback = 'function' == typeof next && next;
+    return this;
+  };
+
+  /**
+   * callback used when the request completes.
+   */
+  Jampper.prototype.always = function(next) {
+    this.alwaysCallback = 'function' == typeof next && next;
     return this;
   };
 
