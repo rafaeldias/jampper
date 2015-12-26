@@ -1,6 +1,6 @@
 {
   "name": "jampper",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Javascript API Mapper",
   "author": "Rafael Leal Dias",
   "main": "dist/jampper.js",
