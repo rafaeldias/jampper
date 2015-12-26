@@ -7,19 +7,11 @@
   ],
   "description": "Javascript API mapper",
   "main": "src/jampper.js",
-  "ignore": [
-    "test",
-    "src",
-    "node_modules",
-    ".gitignore"
-    ".npmignore",
-    "build.js"
-  ],
   "keywords": [
     "rest",
     "restful",
     "api",
-    "mapper'"
+    "mapper"
   ],
   "devDependencies": {
     "requirejs": "^2.1.17",
@@ -29,5 +21,8 @@
   "ignore": [
     "bower_components",
     "test",
+    ".gitignore",
+    ".npmignore",
+    "build.js"
   ]
 }
