@@ -22,29 +22,14 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
        *
        * @return {Object} Jampper
        */
-    , request = function(type, opts) {
+    , request = function(type, opts, callback) {
         var that = this;
 
         this.jxhr = $.ajax($.extend(opts || {}, {
           url : this.route,
-          type : type
-        }))
-          .done(function() {
-            if ( 'function' === typeof that.doneCallback ) {
-              that.doneCallback.apply(that, arguments);
-            }
-          })
-            .fail(function() {
-              if ( 'function' === typeof that.failCallback ) {
-                that.failCallback.apply(that, arguments);
-              }
-            })
-              .always(function() {
-                if ( 'function' === typeof that.alwaysCallback ) {
-                  that.alwaysCallback.apply(that, arguments);
-                }
-              });
-        return this;
+          type: this.type
+        }));
+        return this.always(callback);
       }
       /**
        * Jampper's constructor
@@ -112,7 +97,6 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
           add( prefix, obj );
         }
       }
-
       // Serialize an array of form elements or a set of
       // key/values into a query string
       return function( a, traditional ) {
@@ -152,17 +136,20 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
   /**
    * Define methods create, read, update and delete
    * to the Jampper's prototype.
+   *
+   * @param {Object} methods - Map of methods and HTTP verbs
+   *
+   * @return undefined
    */
   Jampper.mapMethod = function(methods) {
     for ( var method in methods )
       Jampper.prototype[method] = (function(met) {
-        return function(opts, done) {
+        return function(opts, callback) {
           if ( 'function' === typeof opts ) {
-            done = opts;
+            callback = opts;
             opts = void 0;
           }
-          this.alwaysCallback = done;
-          return request.call(this, methods[met], opts);
+          return request.call(this, methods[met], opts, callback);
         };
       })(method);
   };
@@ -177,6 +164,8 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
 
   /**
    * Abort current request
+   *
+   * @return {Object} Jampper
    */
   Jampper.prototype.abort = function() {
     if (this.jxhr && 'object' === typeof this.jxhr)
@@ -186,25 +175,37 @@ define(['jquery/ajax', 'jquery/ajax/xhr'], function($) {
 
   /**
    * callback used when the request succeeds
+   *
+   * @param {Function} next - callback for successful request
+   *
+   * @return {Object} Jampper
    */
   Jampper.prototype.done = function(next) {
-    this.doneCallback = 'function' === typeof next &&  next;
+    this.jxhr.done('function' === typeof next && $.proxy(next, this) || $.noop);
     return this;
   };
 
   /**
    * callback used when the request fails.
+   *
+   * @param {Function} next - callback for failed request
+   *
+   * @return {Object} Jampper
    */
   Jampper.prototype.fail = function(next) {
-    this.failCallback = 'function' == typeof next && next;
+    this.jxhr.fail('function' == typeof next && $.proxy(next, this) || $.noop);
     return this;
   };
 
   /**
    * callback used when the request completes.
+   *
+   * @param {Function} next - callback for completed request
+   *
+   * @return {Object} Jampper
    */
   Jampper.prototype.always = function(next) {
-    this.alwaysCallback = 'function' == typeof next && next;
+    this.jxhr.always('function' == typeof next && $.proxy(next, this) || $.noop);
     return this;
   };
 

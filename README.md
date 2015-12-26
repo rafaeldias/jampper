@@ -18,6 +18,7 @@ $ bower install jampper
 ### Building from source
 Clone the [repository](1) and run :
 ```bash
+$ npm install
 $ node build.js
 ```
 
@@ -25,7 +26,7 @@ $ node build.js
 
 Regardless of the way you have chosen to install the lib, de `dist` directory will contain the compiled files.
 
-If you already loaded the jQuery in your page, you should use the `jampper.jquery.js` file:
+If you have already loaded the jQuery in your page, you should use the `jampper.jquery.js` file:
 
 ```html
 <script src="path/to/jquery.js"></script>
@@ -84,7 +85,7 @@ Jampper.mapMethod({
   'update' : 'PATCH',
   'edit'   : 'PUT'
 });
-```
+``` 
 
 Now the next time we call the overwritten `update` method on a resouce, the HTTP verb `PATCH` will be used in the request, and the new `edit` method will send the `PUT` HTTP verb to the server.
 
@@ -108,9 +109,9 @@ The arguments of the callback passed to any of the CRUD methods may be different
 
 The `done`, `fail` and `always` methods are also exposed by jampper.
 
-### Global
+### Global Setup
 
-Jampper also exposes the `.setup` method, so it's possible to configure global ajax properties even if the user is not using jQuery.
+Jampper also exposes the `.setup` method, so it's possible to configure global ajax properties even if  user is not using jQuery.
 
 ## License
 

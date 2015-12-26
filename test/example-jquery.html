@@ -38,15 +38,16 @@
           sort : "start",
           order : "desc"
         }
-      }, function(res) {
+      }).always(function(res) {
         console.log(res);
       });
 
-      repo.commits().read(function(res) {
-        console.log(res);
-      })
-        .update(function(res) {
-          console.log(this.jxhr.getAllResponseHeaders());
+      repo.commits()
+        .read(function(res) {
+          console.log(res);
+        })
+        .update(function(res, status, jqXHR) {
+          console.log(jqXHR.getAllResponseHeaders());
         });
     </script>
   </body>
