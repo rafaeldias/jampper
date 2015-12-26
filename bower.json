@@ -1,17 +1,30 @@
 {
   "name": "jampper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/rafaeldias/jampper",
   "authors": [
     "Rafael Leal Dias <rafaeldias.c@gmail.com>"
   ],
   "description": "Javascript API mapper",
   "main": "src/jampper.js",
-  "keywords": [
-    "REST",
-    "API",
-    "Mapper'"
+  "ignore": [
+    "test",
+    "src",
+    "node_modules",
+    ".gitignore"
+    ".npmignore",
+    "build.js"
   ],
+  "keywords": [
+    "rest",
+    "restful",
+    "api",
+    "mapper'"
+  ],
+  "devDependencies": {
+    "requirejs": "^2.1.17",
+    "jquery": "^2.1.3"
+  },
   "license": "MIT",
   "ignore": [
     "bower_components",

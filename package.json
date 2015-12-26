@@ -1,6 +1,6 @@
 {
   "name": "jampper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Javascript API Mapper",
   "author": "Rafael Leal Dias",
   "main": "dist/jampper.js",
@@ -15,9 +15,10 @@
     "url": "https://github.com/rafaeldias/jampper.git"
   },
   "keywords": [
-    "REST",
-    "API",
-    "Mapper"
+    "rest",
+    "restful",
+    "api",
+    "mapper"
   ],
   "devDependencies": {
     "requirejs": "^2.1.17",
