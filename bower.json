@@ -17,12 +17,13 @@
     "requirejs": "^2.1.17",
     "jquery": "^2.1.3"
   },
-  "license": "MIT",
   "ignore": [
-    "bower_components",
+    "src",
     "test",
     ".gitignore",
     ".npmignore",
-    "build.js"
+    "build.js",
+    "package.json"
   ]
+  "license": "MIT"
 }
