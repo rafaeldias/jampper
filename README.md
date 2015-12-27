@@ -19,7 +19,7 @@ $ bower install jampper
 Clone the [repository](1) and run :
 ```bash
 $ npm install
-$ node build.js
+$ npm run build
 ```
 
 ## Embedding
